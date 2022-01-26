@@ -51,9 +51,11 @@
             color: black;
             background-color: white !important;
         }
+
         #lolimg {
             width: 100%;
         }
+
         .card-text {
             height: 9em;
             overflow: auto;
@@ -71,24 +73,25 @@
     </div>
 
     <template id="cardLOL" class="container-fluid">
-            <div class="card mx-auto " style="width: 18rem;">
-                <img src="" class="card-img-top" alt="...">
-                <div class="card-body ">
-                    <h5 class="card-title">card-title</h5>
-                    <p class="card-text"></p>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#info">
-                        詳細
-                    </button>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        影片
-                    </button>
-                </div>
+        <div class="card mx-auto " style="width: 18rem;">
+            <img src="" class="card-img-top" alt="...">
+            <div class="card-body ">
+                <h5 class="card-title">card-title</h5>
+                <p class="card-text"></p>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#info" id="input">
+                    詳細
+                </button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#video" id="inputvideo">
+                    影片
+                </button>
             </div>
+        </div>
 
     </template>
 
     <!-- Modal 互動視窗-->
-    <div class="modal fade " id="info" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" class='w-25'>
+    <div class="modal fade " id="info"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        class='w-25'>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -96,10 +99,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div>
-                <img id="lolimg" class="">
+                    <img id="lolimg" class="">
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade " id="video"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        class='w-25'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body ">
-                    <h5></h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -133,8 +152,9 @@
             let xhr = new XMLHttpRequest()
             console.log(xhr);
             xhr.onload = function () {
-                // dataArray = JSON.parse(this.responseText)
-                dataArray = this.response
+                dataArray = JSON.parse(this.responseText)
+
+                // dataArray = this.response
                 console.log(dataArray);
 
                 Object.values(dataArray.data).forEach(function (item, index) {
@@ -144,22 +164,29 @@
                 })
             }
             xhr.open("GET", url)
-            xhr.responseType = "json"
+            // xhr.responseType = "json"
             xhr.send()
         }
 
-        function getCard(title) {
+        function getCard(lol) {
             let cloneCard = cardTemplate.content.cloneNode(true);
-            cloneCard.querySelector("h5").innerText = title.id
-            cloneCard.querySelector("img").src = `https://cdngarenanow-a.akamaihd.net/games/lol/2020/LOLwebsite/champion/${title.id}_0.jpg`
-            cloneCard.querySelector("p").innerText = title.blurb
+            cloneCard.querySelector("h5").innerText = lol.id
+            cloneCard.querySelector("img").src = `https://cdngarenanow-a.akamaihd.net/games/lol/2020/LOLwebsite/champion/${lol.id}_0.jpg`
+            cloneCard.querySelector("p").innerText = lol.blurb
 
-            cloneCard.querySelector(".btn").addEventListener("click", function () {
+            cloneCard.querySelector("#input").addEventListener("click", function () {
                 let modal = document.querySelector("#info")
-                modal.querySelector("h5").innerText = title.id
-                modal.querySelector(".modal-body").innerHTML = `HP: ${title.stats.hp}</br>Move Speed: ${title.stats.movespeed}</br>Armor: ${title.stats.movespeed}</br>Spell Block: ${title.stats.spellblock}</br>AttackRange: ${title.stats.attackrange}`
-                modal.querySelector("#lolimg").src = `https://cdngarenanow-a.akamaihd.net/webmain/static/pss/lol/items_splash/${title.id.toLowerCase()}_0.jpg`
+                modal.querySelector("h5").innerText = lol.id
+                modal.querySelector(".modal-body").innerHTML = `HP: ${lol.stats.hp}</br>Move Speed: ${lol.stats.movespeed}</br>Armor: ${lol.stats.movespeed}</br>Spell Block: ${lol.stats.spellblock}</br>AttackRange: ${lol.stats.attackrange}`
+                modal.querySelector("#lolimg").src = `https://cdngarenanow-a.akamaihd.net/webmain/static/pss/lol/items_splash/${lol.id.toLowerCase()}_0.jpg`
             })
+            cloneCard.querySelector("#inputvideo").addEventListener("click", function () {
+                let modal = document.querySelector("#video")
+                modal.querySelector("h5").innerText = lol.id
+                const videoUrl ='<iframe width="100%" height="315" src="https://www.youtube.com/embed/k4MUv52UHOs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                modal.querySelector(".modal-body").innerHTML = videoUrl
+            })
+            
             return cloneCard;
         }
     </script>
@@ -167,4 +194,3 @@
 </body>
 
 </html>
-
