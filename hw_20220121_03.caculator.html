@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>計算機</title>
+    <style>
+        .warp{
+            width: 400px;
+            
+        }
+        button{
+            width: 70px;
+            height: 70px;
+            margin: 10px;
+            font-size: 30px;
+        }
+        .equal{
+            width: 340px;
+        }
+        input{
+            width: 340px;
+            height: 70px;
+        }
+        .equal{
+            background-color: red-200;
+        }
+        .box{
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container d-flex flex-column align-items-center ">
+        <div class="box justify-content-center d-flex flex-wrap bg-secondary">
+        <div class="row justify-content-center d-flex flex-wrap">
+            <div class="p-3 text-end mt-5">
+                <input type="text" class="p-3 text-end fs-2 border-dark border-2">
+            </div>
+        </div>
+        <div class="warp d-flex flex-wrap justify-content-center ">
+            <button class="num bg-warning rounded-circle">1</button>
+            <button class="num bg-warning rounded-circle">2</button>
+            <button class="num bg-warning rounded-circle">3</button>
+            <button class="sign bg-primary rounded-3">+</button>
+            <button class="num bg-warning rounded-circle">4</button>
+            <button class="num bg-warning rounded-circle">5</button>
+            <button class="num bg-warning rounded-circle">6</button>
+            <button class="sign bg-primary">-</button>
+            <button class="num bg-warning rounded-circle">7</button>
+            <button class="num bg-warning rounded-circle">8</button>
+            <button class="num bg-warning rounded-circle">9</button>
+            <button class="sign bg-primary rounded-3">*</button>
+            <button class="num bg-warning rounded-circle">.</button>
+            <button class="num bg-warning rounded-circle">0</button>
+            <button class="reset bg-warning rounded-circle">c</button>
+            <button class="sign bg-primary rounded-3">/</button>
+            <button class="equal bg-danger rounded-3 mb-5">=</button>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+        <script>
+            let currentSign = ""
+            let numFirst = 0
+            let numSecond = 0
+
+            const caculateMethods = [
+                {sign: '+', func:(a,b) => a + b },
+                {sign: '-', func:(a,b) => a - b },
+                {sign: '*', func:(a,b) => a * b },
+                {sign: '/', func:(a,b) => a / b }
+            ]
+
+            //DOM
+            const numberInput = document.querySelector('input')
+            const resetBtn = document.querySelector('.reset')
+            const equalBtn = document.querySelector('.equal')
+
+            const numberBtns = document.querySelectorAll('.num')
+            const signBtns = document.querySelectorAll('.sign')
+
+            //window.onlord
+            window.onload = function(){
+                //數字按鈕們
+                numberBtns.forEach(btn =>{
+                    btn.onclick = function(){
+                        numberInput.value += btn.innerText
+                    }
+                })
+
+                //清除按鈕
+                resetBtn.onclick = function(){
+                    numberInput.value = ""
+                }
+
+                //符號按鈕"們"
+                signBtns.forEach(btn =>{
+                    btn.onclick = function(){
+                        currentSign = btn.innerText
+                        numFirst = parseFloat(numberInput.value)
+                        numberInput.value = ""
+                    }
+                })
+
+                //等於按鈕
+                equalBtn.onclick = function(){
+                    numSecond = parseFloat(numberInput.value)
+                    let caculate = caculateMethods.find(x => x.sign == currentSign)
+                    let answer = caculate.func(numFirst,numSecond)
+
+                    numberInput.value = answer
+                }
+
+            }
+        </script>
+</body>
+
+</html>

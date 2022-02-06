@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <title>Slot</title>
+    <style>
+        body{
+            background-color:cornsilk
+        }
+        .col-1 {
+            font-size: 10px;
+            margin: 20px;
+            width: 100px;
+            border-radius: 50%;
+        }
+        img{
+            width: 200px;
+        }
+
+        [box-id].active {
+            /* border: solid 5px red; */
+            /* background-color: 	#FFFF6F; */
+            transition: 0s;
+            transform: translate(5px, 5px);
+        }
+
+        [box-id] {
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            transition: 0.5s;
+        }
+
+        #number {
+            font-size: 25px;
+            text-align: center;
+            color: chocolate;
+        }
+        #title{
+            font-size: 36px;
+            text-align: center;
+            color:black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center active">
+            <div class="col-1" box-id="1"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-1" box-id="2"></div>
+            <div class="col-2"></div>
+            <div class="col-1 " box-id="3"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-1 " box-id="4"></div>
+            <div class="col-2"></div>
+            <div class="col-1 " box-id="5"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-1 " box-id="6"></div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <p id="title" class="p-3 mt-4 "></p>
+            <p id="number" class="p-3 mt-4 "></p>
+        </div>
+        <div class="col-2">
+            <button class="p-3 mt-4 bg-danger text-white border border-danger rounded-3 w-75 h-75 fs-4">來看看動畫吧!!</button>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <script>
+
+        
+
+        //宣告
+        //格子資料
+        let brickData = [
+            {
+                id: '1',
+                title: '海賊王',
+                pic: '/hw_20220128_solt/小瑪莉圖片/海賊王.png',
+                target: function () {
+                    return '想要我的財寶嗎？去找吧！偉大航路！我把世界上的一切都放在了那裡'
+                }
+            },
+            {
+                id: '2',
+                title: '火影忍者',
+                pic: '/hw_20220128_solt/小瑪莉圖片/火影忍者.png',
+                target: function () {
+                    return '人生在世只有一次，不必勉強選擇自己不喜歡的路，隨性而生或隨性而死都沒關係，不過，無論選擇哪條路，都不要忘記保護自己所珍視的人'
+                }
+            },
+            {
+                id: '3',
+                title: '我的英雄學院',
+                pic: '/hw_20220128_solt/小瑪莉圖片/我的英雄學院.png',
+                target: function () {
+                    return '已經沒事了，至於為什麼？因為我來了！'
+                }
+            },
+            {
+                id: '4',
+                title: '獵人',
+                pic: '/hw_20220128_solt/小瑪莉圖片/獵人.png',
+                target: function () {
+                    return '如果覺得自己不夠格通過，隻要努力到自己滿意為止就可以了，不用理會別人怎麼說'
+                }
+            },
+            {
+                id: '5',
+                title: '一拳超人',
+                pic: '/hw_20220128_solt/小瑪莉圖片/一拳超人.png',
+                target: function () {
+                    return '一個興趣是當英雄的人'
+                }
+            },
+            {
+                id: '6',
+                title: '進擊的巨人',
+                pic: '/hw_20220128_solt/小瑪莉圖片/進擊的巨人.png',
+                target: function () {
+                    return '萊納，你坐啊'
+                }
+            },
+        ]
+
+        let steps = 0 //剩下要走的步數
+        let allSteps = 0 //全部的步數
+        let currentIndex = 0 //目前走到哪一格
+
+        let speed = 100 //速率(越大代表越慢)
+
+        //DOM
+        let bricks = document.querySelectorAll('[box-id]')
+        const startBtn = document.querySelector('button')
+        const numberShow = document.querySelector('#number')
+        const titleShow = document.querySelector('#title')
+        const img = document.querySelector('img')
+
+        //Window.onlord
+        window.onload = function () {
+
+            //將資料塞進格子
+            bricks.forEach(box => {
+                let id = box.getAttributeNode('box-id').value
+                let data = brickData.find(x => x.id == id)
+
+                let pic = document.createElement('img')
+                pic.setAttribute('src', data.pic)
+                box.appendChild(pic)
+            })
+
+            //按下Start
+            startBtn.onclick = function () {
+
+                //每次開始速度重新整理一次
+                speed = 100
+
+                let random = Math.floor(Math.random() * brickData.length) + 1
+                //steps剩下要走的步數
+                // steps = random //v1
+                steps = random + (3 * bricks.length) //v2
+                //allSteps全部的步數,為了要接應底下的方法
+                allSteps = steps
+                turnAround()
+            }
+
+            //function
+            function turnAround() {
+                bricks[currentIndex].classList.remove('active')
+                currentIndex++
+
+                if (currentIndex >= bricks.length)
+                    currentIndex = 0
+
+                bricks[currentIndex].classList.add('active')
+                steps--
+
+                if (steps > 0) {
+                    //還沒走完
+                    //設定
+                    //再做一次,0.05秒
+                    setTimeout(turnAround, speed)
+
+                    //steps是會變動的步數因為每走一步都會遞減,allSteps = steps,allSteps是固定的步數
+                    //加入變速,當剩餘步數剩 1/3 ,減速
+                    if (steps < Math.floor(allSteps / 3)) //v2,變速
+                        speed += 10
+                } else {
+                    //走完了
+                    let name =  brickData[currentIndex].title
+                    titleShow.innerText = ` ${name} `
+                    let val = brickData[currentIndex].target()
+                    numberShow.innerText = ` ${val} `
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
